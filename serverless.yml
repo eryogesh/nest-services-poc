@@ -1,0 +1,33 @@
+service: nest-services-poc
+useDotenv: true
+
+plugins:
+  - '@hewmen/serverless-plugin-typescript'
+  - serverless-plugin-optimize
+  - serverless-offline
+  - serverless-plugin-warmup
+
+custom:
+  # Enable warmup on all functions (only for production and staging)
+  warmup:
+      enabled: true
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 512
+  stage: dev
+  lambdaHashingVersion: 20201221
+
+package:
+  individually: true
+  include:
+    - .env
+
+functions:
+  main:
+    handler: src/lambda.handler
+    events:
+      - http:
+          method: any
+          path: /{any+}
